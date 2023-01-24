@@ -35,6 +35,7 @@ RUN yum-config-manager --add-repo https://openresty.org/package/centos/openresty
         && curl -k "https://downloads.apache.org/apisix/${APISIX_VERSION}/apache-apisix-${APISIX_VERSION}-src.tgz" -o ${APISIX_SOURCE_PATH}-src.tgz \
         && mkdir -p /tmp/apache-apisix-${APISIX_VERSION} && tar -zxvf /tmp/apache-apisix-${APISIX_VERSION}-src.tgz -C ${APISIX_SOURCE_PATH} \
         && cd ${APISIX_SOURCE_PATH} \ && luarocks config variables.PCRE_DIR /usr/local/openresty/pcre && luarocks config variables.PCRE_INCDIR /usr/local/openresty/pcre/include \
+        && sed -i 's/nginx-lua-prometheus = 0.20220127/nginx-lua-prometheus = 0.20220527/' rockspec/apisix-master-0.rockspec > /dev/null \
         && LUAROCKS_SERVER=https://luarocks.cn make deps && ENV_INST_LUADIR=${APISIX_WORKER_DIR} make install \
         && cp -r ${APISIX_SOURCE_PATH}/deps ${APISIX_WORKER_DIR}/deps \
         && yum install -y perl-App-cpanminus.noarch && `cpanm --notest Test::Nginx IPC::Run > build.log 2>&1 || (cat build.log && exit 1)` && echo "export TEST_NGINX_BINARY=/usr/local/openresty/bin/openresty >> /root/.bash_profile" \
