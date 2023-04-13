@@ -70,13 +70,6 @@ build-on-centos:
 	@$(call func_echo_success_status, "$@ -> [ Done ]")
 
 
-### build-on-alpine : Build apache/apisix:xx-alpine image
-.PHONY: build-on-alpine
-build-on-alpine:
-	@$(call func_echo_status, "$@ -> [ Start ]")
-	$(ENV_DOCKER) build -t $(ENV_APISIX_IMAGE_TAG_NAME)-alpine -f ./alpine/Dockerfile .
-	@$(call func_echo_success_status, "$@ -> [ Done ]")
-
 
 ### build-on-debian-dev : Build apache/apisix:xx-debian-dev image
 .PHONY: build-on-debian-dev
@@ -91,28 +84,6 @@ build-on-debian-dev:
 build-on-debian:
 	@$(call func_echo_status, "$@ -> [ Start ]")
 	$(ENV_DOCKER) build -t $(ENV_APISIX_IMAGE_TAG_NAME)-debian -f ./debian/Dockerfile debian
-	@$(call func_echo_success_status, "$@ -> [ Done ]")
-
-
-### push-on-alpine : Push apache/apisix:xx-alpine image
-.PHONY: push-multiarch-on-alpine
-push-multiarch-on-alpine:
-	@$(call func_echo_status, "$@ -> [ Start ]")
-	$(ENV_DOCKER) buildx build --push \
-		-t $(ENV_APISIX_IMAGE_TAG_NAME)-alpine \
-		--platform linux/amd64,linux/arm64 \
-		-f ./alpine/Dockerfile .
-	@$(call func_echo_success_status, "$@ -> [ Done ]")
-
-
-### push-on-alpine : Push apache/apisix:dev image
-.PHONY: push-multiarch-dev-on-debian
-push-multiarch-dev-on-debian:
-	@$(call func_echo_status, "$@ -> [ Start ]")
-	$(ENV_DOCKER) buildx build --network=host --push \
-		-t $(IMAGE_NAME):dev \
-		--platform linux/amd64,linux/arm64 \
-		-f ./debian-dev/Dockerfile debian-dev
 	@$(call func_echo_success_status, "$@ -> [ Done ]")
 
 
@@ -151,14 +122,6 @@ push-multiarch-on-latest:
 			--platform linux/amd64,linux/arm64 \
 			-f ./debian/Dockerfile debian; \
 	fi
-	@$(call func_echo_success_status, "$@ -> [ Done ]")
-
-
-### build-on-alpine-cn : Build apache/apisix:xx-alpine image (for chinese)
-.PHONY: build-on-alpine-cn
-build-on-alpine-cn:
-	@$(call func_echo_status, "$@ -> [ Start ]")
-	$(ENV_DOCKER) build -t $(ENV_APISIX_IMAGE_TAG_NAME)-alpine --build-arg APISIX_VERSION=$(APISIX_VERSION) --build-arg ENABLE_PROXY=true -f alpine/Dockerfile alpine
 	@$(call func_echo_success_status, "$@ -> [ Done ]")
 
 
