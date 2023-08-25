@@ -1,0 +1,5 @@
+# centos7
+cd  centos-base && docker build --no-cache --build-arg IMAGE_VERSION=7 -t apisix-base:2.15.3-centos -f Dockerfile .
+# centos8
+cd  centos-base && docker build --no-cache --build-arg IMAGE_VERSION=8 -t apisix-base:2.15.3-centos8 -f Dockerfile .
+
