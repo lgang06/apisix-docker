@@ -48,10 +48,17 @@ rm -rf luarocks-"$LUAROCKS_VER"
 mkdir ~/.luarocks || true
 
 # OpenResty 1.17.8 or higher version uses openssl111 as the openssl dirname.
-OPENSSL_PREFIX=${OPENRESTY_PREFIX}/openssl
-if [ -d ${OPENRESTY_PREFIX}/openssl111 ]; then
-    OPENSSL_PREFIX=${OPENRESTY_PREFIX}/openssl111
+OPENSSL_PREFIX=${OPENRESTY_PREFIX}/openssl3
+#if [ -d ${OPENRESTY_PREFIX}/openssl111 ]; then
+#    OPENSSL_PREFIX=${OPENRESTY_PREFIX}/openssl111
+#fi
+if [ -d ${OPENRESTY_PREFIX}/openssl3 ]; then
+    OPENSSL_PREFIX=${OPENRESTY_PREFIX}/openssl3
 fi
+
+[ ! -d ${OPENSSL_PREFIX} ] && echo "Warning: the path ${OPENSSL_PREFIX} is not found."
+
+ln -s ${OPENSSL_PREFIX} ${OPENSSL_PREFIX}/../openssl
 
 FOUND_PATH=$(echo "${PATH}" | grep -oP '(?<=:|)/usr/local/bin(?=:|)') || true
 if [[ "${FOUND_PATH}" == "" ]]; then
@@ -61,3 +68,4 @@ fi
 
 luarocks config variables.OPENSSL_LIBDIR ${OPENSSL_PREFIX}/lib
 luarocks config variables.OPENSSL_INCDIR ${OPENSSL_PREFIX}/include
+
